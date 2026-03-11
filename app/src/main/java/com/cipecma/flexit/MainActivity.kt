@@ -1,5 +1,6 @@
 package com.cipecma.flexit
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -12,6 +13,8 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.ui.NavigationUI
+import com.cipecma.flexit.auth.AuthManager
 import com.cipecma.flexit.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -21,21 +24,33 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Si pas connecté, redirige vers LoginActivity
+        if (!AuthManager.isLoggedIn()) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.appBarMain.toolbar)
 
+        // Exemple FAB
         binding.appBarMain.fab?.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null)
                 .setAnchorView(R.id.fab).show()
         }
 
+        // NavController
         val navHostFragment =
-            (supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment?)!!
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
         val navController = navHostFragment.navController
 
-        binding.navView?.let {
+        // Drawer Navigation pour les items avec fragments
+        binding.navView?.let { navView ->
             appBarConfiguration = AppBarConfiguration(
                 setOf(
                     R.id.nav_transform, R.id.nav_reflow, R.id.nav_slideshow, R.id.nav_settings
@@ -43,28 +58,51 @@ class MainActivity : AppCompatActivity() {
                 binding.drawerLayout
             )
             setupActionBarWithNavController(navController, appBarConfiguration)
-            it.setupWithNavController(navController)
+
+            // Configure seulement les items liés aux fragments
+            navView.setupWithNavController(navController)
+
+            // Listener manuel pour logout
+            navView.setNavigationItemSelectedListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.nav_logout -> {
+                        logout()
+                        true
+                    }
+                    else -> {
+                        val handled = NavigationUI.onNavDestinationSelected(menuItem, navController)
+                        if (handled) binding.drawerLayout?.closeDrawers()
+                        handled
+                    }
+                }
+            }
         }
 
-        binding.appBarMain.contentMain.bottomNavView?.let {
-            appBarConfiguration = AppBarConfiguration(
+        // BottomNavigation si existant
+        binding.appBarMain.contentMain.bottomNavView?.let { bottomNav ->
+            val bottomAppBarConfig = AppBarConfiguration(
                 setOf(
                     R.id.nav_transform, R.id.nav_reflow, R.id.nav_slideshow
                 )
             )
-            setupActionBarWithNavController(navController, appBarConfiguration)
-            it.setupWithNavController(navController)
+            setupActionBarWithNavController(navController, bottomAppBarConfig)
+            bottomNav.setupWithNavController(navController)
         }
+    }
+
+    // Fonction de logout
+    private fun logout() {
+        AuthManager.clearToken()
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val result = super.onCreateOptionsMenu(menu)
-        // Using findViewById because NavigationView exists in different layout files
-        // between w600dp and w1240dp
         val navView: NavigationView? = findViewById(R.id.nav_view)
         if (navView == null) {
-            // The navigation drawer already has the items including the items in the overflow menu
-            // We only inflate the overflow menu if the navigation drawer isn't visible
             menuInflater.inflate(R.menu.overflow, menu)
         }
         return result
