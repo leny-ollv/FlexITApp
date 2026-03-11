@@ -108,6 +108,7 @@ class MainActivity : AppCompatActivity() {
         return result
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_settings -> {
