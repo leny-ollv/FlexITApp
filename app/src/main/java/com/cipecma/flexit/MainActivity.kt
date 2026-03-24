@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         binding.navView?.let { navView ->
             appBarConfiguration = AppBarConfiguration(
                 setOf(
-                    R.id.nav_transform, R.id.nav_reflow, R.id.nav_slideshow, R.id.nav_settings
+                    R.id.nav_program, R.id.nav_transform, R.id.nav_reflow, R.id.nav_slideshow, R.id.nav_settings
                 ),
                 binding.drawerLayout
             )
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             // Configure seulement les items liés aux fragments
             navView.setupWithNavController(navController)
 
-            // Listener manuel pour logout
+            // Listener manuel pour logout (Menu Latéral)
             navView.setNavigationItemSelectedListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.nav_logout -> {
@@ -93,6 +93,10 @@ class MainActivity : AppCompatActivity() {
     // Fonction de logout
     private fun logout() {
         AuthManager.clearToken()
+
+        val sharedPref = getSharedPreferences("auth", MODE_PRIVATE)
+        sharedPref.edit().clear().apply()
+
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
@@ -100,23 +104,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val result = super.onCreateOptionsMenu(menu)
-        val navView: NavigationView? = findViewById(R.id.nav_view)
-        if (navView == null) {
-            menuInflater.inflate(R.menu.overflow, menu)
-        }
-        return result
+        // MODIFICATION : On affiche le menu overflow (celui en haut à droite)
+        menuInflater.inflate(R.menu.overflow, menu)
+        return true
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        // MODIFICATION : Gestion du clic sur Logout et Settings dans le menu du haut
+        return when (item.itemId) {
             R.id.nav_settings -> {
                 val navController = findNavController(R.id.nav_host_fragment_content_main)
                 navController.navigate(R.id.nav_settings)
+                true
             }
+            R.id.nav_logout -> {
+                logout() // Appel de la fonction de redirection
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -6,6 +6,12 @@
     app:startDestination="@+id/nav_transform">
 
     <fragment
+        android:id="@+id/nav_program"
+        android:name="com.cipecma.flexit.ui.program.ProgramFragment"
+        android:label="@string/menu_program"
+        tools:layout="@layout/fragment_program" />
+
+    <fragment
         android:id="@+id/nav_transform"
         android:name="com.cipecma.flexit.ui.transform.TransformFragment"
         android:label="@string/menu_transform"

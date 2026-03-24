@@ -14,5 +14,12 @@ interface ApiService {
         @Field("password") password: String
     ): LoginResponse
 
-    //Les autres appels AOI ICIs
+    //Les autres appels API ICIs
+    @GET("programs/user/{id}")
+    suspend fun getProgramNames(@Path("id") userId: Int): List<Program>
+
+    data class Program(
+        val id: String,
+        val name: String
+    )
 }
