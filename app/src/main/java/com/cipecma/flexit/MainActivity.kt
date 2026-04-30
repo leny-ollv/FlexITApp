@@ -4,8 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import android.widget.EditText
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,11 +17,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.ui.NavigationUI
 import com.cipecma.flexit.auth.AuthManager
 import com.cipecma.flexit.databinding.ActivityMainBinding
+import com.cipecma.flexit.ui.program.ProgramViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private val programViewModel: ProgramViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +41,29 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.appBarMain.toolbar)
 
         // Exemple FAB
-        binding.appBarMain.fab?.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .setAnchorView(R.id.fab).show()
+        binding.appBarMain.fab?.setOnClickListener {
+            val inflater = layoutInflater
+            val dialogLayout = inflater.inflate(R.layout.create_program, null)
+            val editText = dialogLayout.findViewById<EditText>(R.id.editProgramName)
+
+            androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Créer un programme")
+                .setView(dialogLayout)
+                .setPositiveButton("Enregistrer") { _, _ ->
+                    val nom = editText.text.toString()
+                    if (nom.isNotBlank()) {
+                        // Récupération de l'id du user
+                        val currentUserId = AuthManager.getUserId()
+                        // Si l'id est bien configuré (> 0), on lance l'appel
+                        if (currentUserId != -1) {
+                            programViewModel.fetchPrograms(userId = currentUserId)
+                        }
+                        programViewModel.createProgram(nom, currentUserId)
+                        Toast.makeText(this, "Création du programme...", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .setNegativeButton("Annuler", null)
+                .show()
         }
 
         // NavController
@@ -53,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         binding.navView?.let { navView ->
             appBarConfiguration = AppBarConfiguration(
                 setOf(
-                    R.id.nav_program, R.id.nav_transform, R.id.nav_reflow, R.id.nav_slideshow, R.id.nav_settings
+                    R.id.nav_program, R.id.nav_settings
                 ),
                 binding.drawerLayout
             )
@@ -82,7 +104,7 @@ class MainActivity : AppCompatActivity() {
         binding.appBarMain.contentMain.bottomNavView?.let { bottomNav ->
             val bottomAppBarConfig = AppBarConfiguration(
                 setOf(
-                    R.id.nav_transform, R.id.nav_reflow, R.id.nav_slideshow
+                    R.id.nav_program, R.id.nav_settings
                 )
             )
             setupActionBarWithNavController(navController, bottomAppBarConfig)
@@ -110,13 +132,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // MODIFICATION : Gestion du clic sur Logout et Settings dans le menu du haut
+        // MODIFICATION : Gestion du clic sur Logout dans le menu du haut
         return when (item.itemId) {
-            R.id.nav_settings -> {
-                val navController = findNavController(R.id.nav_host_fragment_content_main)
-                navController.navigate(R.id.nav_settings)
-                true
-            }
             R.id.nav_logout -> {
                 logout() // Appel de la fonction de redirection
                 true

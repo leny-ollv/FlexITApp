@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_transform">
+    app:startDestination="@+id/nav_program">
 
     <fragment
         android:id="@+id/nav_program"
@@ -12,26 +12,19 @@
         tools:layout="@layout/fragment_program" />
 
     <fragment
-        android:id="@+id/nav_transform"
-        android:name="com.cipecma.flexit.ui.transform.TransformFragment"
-        android:label="@string/menu_transform"
-        tools:layout="@layout/fragment_transform" />
-
-    <fragment
-        android:id="@+id/nav_reflow"
-        android:name="com.cipecma.flexit.ui.reflow.ReflowFragment"
-        android:label="@string/menu_reflow"
-        tools:layout="@layout/fragment_reflow" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.cipecma.flexit.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
-
-    <fragment
         android:id="@+id/nav_settings"
         android:name="com.cipecma.flexit.ui.settings.SettingsFragment"
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/nav_edit_program"
+        android:name="com.cipecma.flexit.ui.editprogram.EditProgramFragment"
+        android:label="Modifier le programme"
+        tools:layout="@layout/fragment_edit_program">
+
+        <argument
+            android:name="programNameKey"
+            app:argType="string" />
+    </fragment>
 </navigation>

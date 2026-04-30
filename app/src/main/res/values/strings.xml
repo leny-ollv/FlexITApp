@@ -7,11 +7,9 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_transform">Transform</string>
-    <string name="menu_reflow">Reflow</string>
-    <string name="menu_slideshow">Slideshow</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_program">Program</string>
+    <string name="menu_edit_program">Edit program</string>
 
     <string name="lorem_ipsum_title">Lorem Ipsum"</string>
     <string name="lorem_ipsum">Lorem Ipsum is simply placeholder text of the printing and
@@ -23,4 +21,10 @@
     <string name="image_view_item_transform_content_description">Represents an image view in the
         item
     </string>
+    <string name="modification_du_programme">Modification du programme</string>
+    <string name="enregistrer_les_modifications">ENREGISTRER LES MODIFICATIONS</string>
+    <string name="date">Date</string>
+    <string name="nombre_d_exercices">Nombre d\'exercices</string>
+    <string name="actions">Actions</string>
+    <string name="nom_du_programme">Nom du programme</string>
 </resources>

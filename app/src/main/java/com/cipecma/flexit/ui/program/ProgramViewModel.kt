@@ -15,7 +15,7 @@ class ProgramViewModel : ViewModel() {
     private val _programNames = MutableLiveData<List<ApiService.Program>>()
     val programNames: LiveData<List<ApiService.Program>> = _programNames
 
-    fun fetchPrograms(userId: Int) {
+    fun fetchPrograms(userId: Int?) {
         viewModelScope.launch {
             try {
                 val response = RetrofitClient.api.getProgramNames(userId)
@@ -33,6 +33,49 @@ class ProgramViewModel : ViewModel() {
                 // LOG : L'erreur CRITIQUE (URL, format, réseau...)
                 Log.e("DEBUG_API", "ERREUR LORS DE L'APPEL", e)
                 _programNames.value = emptyList()
+            }
+        }
+    }
+
+    fun createProgram(name: String, userId: Int?) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitClient.api.createProgram(name, userId)
+                if (response.isSuccessful && response.body()?.success == true) {
+                    fetchPrograms(userId) // On rafraîchit la liste
+                }
+            } catch (e: Exception) {
+                Log.e("API_ERROR", "Erreur création : ${e.message}")
+            }
+        }
+    }
+
+    fun updateProgram(id: Int?, newName: String, userId: Int?){
+        viewModelScope.launch {
+            try {
+                Log.d("API_CALL", "Envoi vers Repository -> ID: $id, Name: $newName, User: $userId")
+                val response = RetrofitClient.api.updateProgram(id, newName, userId)
+                if (response.isSuccessful && response.body()?.success == true) {
+                    fetchPrograms(userId) // On rafraîchit la liste
+                }
+            } catch (e: Exception) {
+                Log.e("API_ERROR", "Erreur création : ${e.message}")
+            }
+        }
+    }
+
+    fun deleteProgram(programId: Int, userId: Int?) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitClient.api.deleteProgram(programId, userId)
+
+                if (response.isSuccessful && response.body()?.success == true) {
+                    fetchPrograms(userId)
+                } else {
+                    Log.e("API_DEBUG", "Réponse : ${response.body()?.message}")
+                }
+            } catch (e: Exception) {
+                Log.e("API_DEBUG", "Erreur : ${e.message}")
             }
         }
     }
