@@ -23,7 +23,7 @@
             android:layout_marginStart="8dp"
             android:text="Nom du programme"
             android:textSize="18sp"
-            android:textColor="@android:color/black"
+            android:textColor="?android:attr/textColorPrimary"
             android:textStyle="bold" />
 
         <ImageButton
@@ -35,7 +35,7 @@
             android:src="@drawable/pen_solid_full"
             android:contentDescription="Modifier"
             android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="@android:color/darker_gray" />
+            app:tint="?android:attr/textColorSecondary" />
 
         <ImageButton
             android:id="@+id/buttonDelete"

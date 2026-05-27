@@ -17,6 +17,21 @@ interface ApiService {
     @GET("programs/user/{id}")
     suspend fun getProgramNames(@Path("id") userId: Int?): List<Program>
 
+    // Détail complet d'un programme (programme + workouts + exercises + series)
+    @GET("programs/{id}")
+    suspend fun getProgramDetail(@Path("id") programId: Int): ProgramDetail
+
+    // Catalogue complet des exercices
+    @GET("exercices/all")
+    suspend fun getAllExercises(): List<ExerciseCatalog>
+
+    // Réécrire toutes les séances d'un programme
+    @POST("programs/workout/save/{id}")
+    suspend fun saveWorkouts(
+        @Path("id") programId: Int,
+        @Body body: SaveWorkoutsBody,
+    ): Response<SaveResponse>
+
     // --- NOUVELLE MÉTHODE POUR LA SUPPRESSION ---
     @FormUrlEncoded
     @POST("programs/delete")

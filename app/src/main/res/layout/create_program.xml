@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="Nom du nouveau programme"
         android:textSize="18sp"
-        android:textColor="@android:color/black"
+        android:textColor="?android:attr/textColorPrimary"
         android:layout_marginBottom="8dp" />
 
     <EditText

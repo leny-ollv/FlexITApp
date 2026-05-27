@@ -17,7 +17,6 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/contentWrapper"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -34,24 +33,57 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp">
+                    app:cardBackgroundColor="@color/flexit_navy_500"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="3dp">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:hint="@string/nom_du_programme"
-                        app:boxBackgroundMode="none">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="20dp">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editProgramName"
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_calendar"
+                            app:tint="@color/white" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Séance du"
+                                android:textColor="#CCFFFFFF"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/textWorkoutTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="--"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <ImageButton
+                            android:id="@+id/btnChangeDate"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Modifier la date"
+                            android:padding="8dp"
+                            android:src="@drawable/pen_solid_full"
+                            app:tint="@color/white" />
+                    </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <LinearLayout
@@ -65,13 +97,13 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Séances"
+                        android:text="Exercices"
                         android:textColor="?android:attr/textColorPrimary"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/textWorkoutsCount"
+                        android:id="@+id/textExercisesCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/badge_pill"
@@ -86,45 +118,34 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/workoutsContainer"
+                    android:id="@+id/exercisesContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
 
                 <TextView
-                    android:id="@+id/textEmptyWorkouts"
+                    android:id="@+id/textEmptyExercises"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:padding="32dp"
-                    android:text="Aucune séance pour le moment.\nAppuyez sur + pour en créer une."
+                    android:text="Aucun exercice.\nAppuyez sur + pour en ajouter un."
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp"
                     android:visibility="gone" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSaveProgram"
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="32dp"
-                    android:backgroundTint="@color/flexit_red_500"
-                    android:text="@string/enregistrer_les_modifications"
-                    android:textColor="@color/white"
-                    app:cornerRadius="16dp" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fabAddWorkout"
+        android:id="@+id/fabAddExercise"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:backgroundTint="@color/flexit_red_500"
-        android:text="Nouvelle séance"
+        android:text="Ajouter un exercice"
         android:textColor="@color/white"
         app:icon="@drawable/plus_solid_full"
         app:iconTint="@color/white" />

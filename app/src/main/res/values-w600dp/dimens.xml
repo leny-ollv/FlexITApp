@@ -1,5 +1,10 @@
 <resources>
-    <dimen name="fragment_horizontal_margin">48dp</dimen>
-    <dimen name="fab_margin">48dp</dimen>
+    <dimen name="fragment_horizontal_margin">0dp</dimen>
+    <dimen name="fab_margin">24dp</dimen>
     <dimen name="item_transform_image_length">142dp</dimen>
+
+    <!-- Tablette : pleine largeur, padding raisonnable. -->
+    <dimen name="edit_content_max_width">9999dp</dimen>
+    <dimen name="edit_content_padding_horizontal">20dp</dimen>
+    <dimen name="edit_content_padding_vertical">20dp</dimen>
 </resources>

@@ -71,6 +71,13 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
         val navController = navHostFragment.navController
 
+        // FAB "+" : visible uniquement sur la liste des programmes
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.appBarMain.fab?.visibility =
+                if (destination.id == R.id.nav_program) android.view.View.VISIBLE
+                else android.view.View.GONE
+        }
+
         // Drawer Navigation pour les items avec fragments
         binding.navView?.let { navView ->
             appBarConfiguration = AppBarConfiguration(

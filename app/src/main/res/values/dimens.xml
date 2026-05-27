@@ -6,4 +6,9 @@
     <dimen name="reflow_text_block_horizontal_gap">8dp</dimen>
     <dimen name="reflow_text_title_size">22sp</dimen>
     <dimen name="reflow_text_description_size">13sp</dimen>
+
+    <!-- Écrans d'édition : pleine largeur sur tous les buckets. -->
+    <dimen name="edit_content_max_width">9999dp</dimen>
+    <dimen name="edit_content_padding_horizontal">16dp</dimen>
+    <dimen name="edit_content_padding_vertical">16dp</dimen>
 </resources>

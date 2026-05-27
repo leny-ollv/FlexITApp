@@ -26,5 +26,24 @@
         <argument
             android:name="programNameKey"
             app:argType="string" />
+        <argument
+            android:name="programIdKey"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="userId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_edit_workout"
+        android:name="com.cipecma.flexit.ui.editprogram.EditWorkoutFragment"
+        android:label="Modifier la séance"
+        tools:layout="@layout/fragment_edit_workout">
+
+        <argument
+            android:name="workoutIndex"
+            app:argType="integer" />
     </fragment>
 </navigation>
