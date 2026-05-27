@@ -48,14 +48,24 @@ class EditProgramFragment : Fragment() {
         programId = arguments?.getInt("programIdKey") ?: -1
         userId = arguments?.getInt("userId") ?: -1
 
-        if (editViewModel.programName.isBlank()) {
-            editViewModel.programName = initialName
+        // Si on arrive sur un nouveau programme, on remet le VM à zéro AVANT
+        // d'observer programName / workouts, pour éviter d'afficher l'état du précédent.
+        val isNewProgram = programId > 0 && editViewModel.currentProgramId != programId
+        if (isNewProgram) {
+            editViewModel.reset()
+            editViewModel.setProgramName(initialName)
         }
-        binding.editProgramName.setText(editViewModel.programName)
+
+        editViewModel.programName.observe(viewLifecycleOwner) { name ->
+            if (binding.editProgramName.text?.toString() != name) {
+                binding.editProgramName.setText(name)
+                binding.editProgramName.setSelection(name.length)
+            }
+        }
         binding.editProgramName.addTextChangedListener(object : android.text.TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                editViewModel.programName = s?.toString().orEmpty()
+                editViewModel.setProgramName(s?.toString().orEmpty())
             }
             override fun afterTextChanged(s: android.text.Editable?) {}
         })
@@ -65,7 +75,7 @@ class EditProgramFragment : Fragment() {
         }
 
         binding.btnSaveProgram.setOnClickListener {
-            val newName = editViewModel.programName.trim()
+            val newName = editViewModel.programName.value.orEmpty().trim()
             if (newName.isBlank()) {
                 binding.editProgramName.error = "Le nom ne peut pas être vide"
                 return@setOnClickListener
@@ -88,7 +98,7 @@ class EditProgramFragment : Fragment() {
             }
         }
 
-        if (editViewModel.currentProgramId != programId && programId > 0) {
+        if (isNewProgram) {
             editViewModel.load(programId)
         }
     }

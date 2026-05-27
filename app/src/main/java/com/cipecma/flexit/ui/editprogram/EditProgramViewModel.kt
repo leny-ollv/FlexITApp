@@ -39,14 +39,27 @@ class EditProgramViewModel : ViewModel() {
     var currentProgramId: Int = -1
         private set
 
-    var programName: String = ""
+    private val _programName = MutableLiveData("")
+    val programName: LiveData<String> = _programName
+
+    fun setProgramName(name: String) {
+        if (_programName.value != name) _programName.value = name
+    }
+
+    /** Réinitialise l'état avant de charger un autre programme. */
+    fun reset() {
+        currentProgramId = -1
+        _programName.value = ""
+        _workouts.value = mutableListOf()
+        _saveResult.value = null
+    }
 
     fun load(programId: Int) {
         currentProgramId = programId
         viewModelScope.launch {
             try {
                 val program = RetrofitClient.api.getProgramDetail(programId)
-                programName = program.name.orEmpty()
+                setProgramName(program.name.orEmpty())
                 val drafts = program.workouts.orEmpty().map { w ->
                     WorkoutDraft(
                         date = w.date.orEmpty(),
